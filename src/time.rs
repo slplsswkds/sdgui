@@ -36,13 +36,7 @@ impl Time24 {
         return time_str;
     }
 
-    /*pub fn shutdown_schedule(&self) {
-        let shutdown_cmd = "shutdown -h ".to_string()
-            + &self.hours.take().to_string() 
-            + ":" + &self.minutes.take().to_string();
-        std::process::Command::new(shutdown_cmd);
-    }*/
-
+    #[allow(dead_code)]
     pub fn shutdown_schedule(&self) {
         std::process::Command::new("shutdown")
             .arg("-h")
@@ -99,11 +93,4 @@ impl Time24 {
         }
         *self.minutes.borrow_mut() = minutes;
     }
-
-    /*pub fn subtract_hours(&mut self, hours_to_subtract: i32) {
-        self.hours -= hours_to_subtract;
-        if self.hours < 0 {
-            self.hours += 24;
-        }
-    }*/
 }
