@@ -48,7 +48,6 @@ impl Time24 {
     
     #[allow(dead_code)]
     pub fn print(&self) {
-        // println!("{}:{}", self.hours.borrow(), self.minutes.borrow());
         println!("{}", self.to_str());
     }
 
