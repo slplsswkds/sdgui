@@ -27,17 +27,17 @@ fn main() {
     let mut but_minutes_down = Button::new(10, 60, 40, 40, "M-");
     let mut but_minutes_up = Button::new(350, 60, 40, 40, "M+");
 
-    let mut disp_time_cheduled = TextDisplay::default().with_size(114, 50).with_pos(143, 200);
-    let buf_time_cheduled = RefCell::from(TextBuffer::default());
-    disp_time_cheduled.set_buffer(buf_time_cheduled.clone().into_inner());
-    disp_time_cheduled.set_text_size(36);
-    disp_time_cheduled.set_text_color(Color::from_hex(0x226611));
+    let mut disp_time_scheduled = TextDisplay::default().with_size(114, 50).with_pos(143, 200);
+    let buf_time_scheduled = RefCell::from(TextBuffer::default());
+    disp_time_scheduled.set_buffer(buf_time_scheduled.clone().into_inner());
+    disp_time_scheduled.set_text_size(36);
+    disp_time_scheduled.set_text_color(Color::from_hex(0x226611));
 
     window.end();
     window.show();
 
     let time_scheduled = time::Time24::new();
-    buf_time_cheduled.clone().into_inner().set_text( &time_scheduled.to_str() );
+    buf_time_scheduled.clone().into_inner().set_text( &time_scheduled.to_str() );
 
     but_schedule.set_callback({
         let time_sch = time_scheduled.clone();
@@ -54,38 +54,38 @@ fn main() {
     );
 
     but_hours_up.set_callback({
-        let mut disp_buf = buf_time_cheduled.clone().into_inner();
-        let mut time_ch = time_scheduled.clone();
+        let mut disp_buf = buf_time_scheduled.clone().into_inner();
+        let mut time_sch = time_scheduled.clone();
         move |_| {
-            time_ch.add_hours(1);
-            disp_buf.set_text(&time_ch.to_str());
+            time_sch.add_hours(1);
+            disp_buf.set_text(&time_sch.to_str());
         }
     });
 
     but_hours_down.set_callback({
-        let mut disp_buf = buf_time_cheduled.clone().into_inner();
-        let mut time_ch = time_scheduled.clone();
+        let mut disp_buf = buf_time_scheduled.clone().into_inner();
+        let mut time_sch = time_scheduled.clone();
         move |_| {
-            time_ch.subtract_hours(1);
-            disp_buf.set_text(&time_ch.to_str());
+            time_sch.subtract_hours(1);
+            disp_buf.set_text(&time_sch.to_str());
         }
     });
 
     but_minutes_up.set_callback({
-        let mut disp_buf = buf_time_cheduled.clone().into_inner();
-        let mut time_ch = time_scheduled.clone();
+        let mut disp_buf = buf_time_scheduled.clone().into_inner();
+        let mut time_sch = time_scheduled.clone();
         move |_| {
-            time_ch.add_minutes(1);
-            disp_buf.set_text(&time_ch.to_str());
+            time_sch.add_minutes(1);
+            disp_buf.set_text(&time_sch.to_str());
         }
     });
 
     but_minutes_down.set_callback({
-        let mut disp_buf = buf_time_cheduled.clone().into_inner();
-        let mut time_ch = time_scheduled.clone();
+        let mut disp_buf = buf_time_scheduled.clone().into_inner();
+        let mut time_sch = time_scheduled.clone();
         move |_| {
-            time_ch.subtract_minutes(1);
-            disp_buf.set_text(&time_ch.to_str());
+            time_sch.subtract_minutes(1);
+            disp_buf.set_text(&time_sch.to_str());
         }
     });
 
