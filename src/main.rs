@@ -36,7 +36,8 @@ fn main() {
     window.end();
     window.show();
 
-    let time_scheduled = time::Time24::new();
+    let mut time_scheduled = time::Time24::new();
+    time_scheduled.now();
     buf_time_scheduled.clone().into_inner().set_text( &time_scheduled.to_str() );
 
     but_schedule.set_callback({

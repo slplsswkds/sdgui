@@ -3,6 +3,8 @@ use std::cell::RefCell;
 
 use std::string::String;
 
+use chrono;
+
 #[derive(Clone)]
 pub struct Time24 {
     pub hours: Rc<RefCell<i32>>,
@@ -16,6 +18,16 @@ impl Time24 {
             hours: Rc::from(RefCell::from(0)),
             minutes: Rc::from(RefCell::from(0)),
         }
+    }
+
+    #[allow(dead_code)]
+    pub fn now(&mut self) {
+        let time = chrono::offset::Local::now().time();
+        let hours: i32 = time.format("%H").to_string().parse().unwrap();
+        let minutes: i32 = time.format("%M").to_string().parse().unwrap();
+
+        *self.hours.borrow_mut() = hours;
+        *self.minutes.borrow_mut() = minutes;
     }
 
     #[allow(dead_code)]
