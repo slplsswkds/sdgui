@@ -14,6 +14,8 @@ use fltk::{
     *,
 };
 
+//use  fltk::enums::FrameType;
+
 fn main() {
     let app = App::default();
     app::set_font_size(18);
@@ -27,11 +29,32 @@ fn main() {
     let mut but_minutes_down = Button::new(10, 60, 40, 40, "M-");
     let mut but_minutes_up = Button::new(350, 60, 40, 40, "M+");
 
-    let mut disp_time_scheduled = TextDisplay::default().with_size(114, 50).with_pos(143, 200);
     let buf_time_scheduled = RefCell::from(TextBuffer::default());
+    let mut disp_time_scheduled = TextDisplay::default()
+        .with_size(114, 50)
+        .with_pos(276, 180)
+        .with_label("Scheduled");
     disp_time_scheduled.set_buffer(buf_time_scheduled.clone().into_inner());
     disp_time_scheduled.set_text_size(36);
     disp_time_scheduled.set_text_color(Color::from_hex(0x226611));
+
+    let buf_time_remained = RefCell::from(TextBuffer::default());
+    let mut disp_time_remained = TextDisplay::default()
+        .with_size(114, 50)
+        .with_pos(143, 180)
+        .with_label("Remained");
+    disp_time_remained.set_buffer(buf_time_remained.clone().into_inner());
+    disp_time_remained.set_text_size(36);
+    disp_time_remained.set_text_color(Color::from_hex(0x226611));
+
+    let buf_time_current = RefCell::from(TextBuffer::default());
+    let mut disp_time_current = TextDisplay::default()
+        .with_size(114, 50)
+        .with_pos(10, 180)
+        .with_label("Current");
+    disp_time_current.set_buffer(buf_time_current.clone().into_inner());
+    disp_time_current.set_text_size(36);
+    disp_time_current.set_text_color(Color::from_hex(0x226611));
 
     window.end();
     window.show();
@@ -39,6 +62,13 @@ fn main() {
     let mut time_scheduled = time::Time24::new();
     time_scheduled.now();
     buf_time_scheduled.clone().into_inner().set_text( &time_scheduled.to_str() );
+
+    let mut time_remained = time::Time24::new();
+    buf_time_remained.clone().into_inner().set_text( &time_remained.to_str() );
+
+    let mut time_current = time::Time24::new();
+    time_current.now();
+    buf_time_current.clone().into_inner().set_text( &time_current.to_str() );
 
     but_schedule.set_callback({
         let time_sch = time_scheduled.clone();
@@ -55,38 +85,54 @@ fn main() {
     );
 
     but_hours_up.set_callback({
-        let mut disp_buf = buf_time_scheduled.clone().into_inner();
-        let mut time_sch = time_scheduled.clone();
+        let mut buf_time_scheduled = buf_time_scheduled.clone().into_inner();
+        let mut time_scheduled = time_scheduled.clone();
+        let mut buf_time_remained = buf_time_remained.clone().into_inner();
+        let mut time_remained = time_remained.clone();
         move |_| {
-            time_sch.add_hours(1);
-            disp_buf.set_text(&time_sch.to_str());
+            time_scheduled.add_hours(1);
+            time_remained.add_hours(1);
+            buf_time_scheduled.set_text(&time_scheduled.to_str());
+            buf_time_remained.set_text(&time_remained.to_str());
         }
     });
 
     but_hours_down.set_callback({
-        let mut disp_buf = buf_time_scheduled.clone().into_inner();
-        let mut time_sch = time_scheduled.clone();
+        let mut buf_time_scheduled = buf_time_scheduled.clone().into_inner();
+        let mut time_scheduled = time_scheduled.clone();
+        let mut buf_time_remained = buf_time_remained.clone().into_inner();
+        let mut time_remained = time_remained.clone();
         move |_| {
-            time_sch.subtract_hours(1);
-            disp_buf.set_text(&time_sch.to_str());
+            time_scheduled.subtract_hours(1);
+            time_remained.subtract_hours(1);
+            buf_time_scheduled.set_text(&time_scheduled.to_str());
+            buf_time_remained.set_text(&time_remained.to_str());
         }
     });
 
     but_minutes_up.set_callback({
-        let mut disp_buf = buf_time_scheduled.clone().into_inner();
-        let mut time_sch = time_scheduled.clone();
+        let mut buf_time_scheduled = buf_time_scheduled.clone().into_inner();
+        let mut time_scheduled = time_scheduled.clone();
+        let mut buf_time_remained = buf_time_remained.clone().into_inner();
+        let mut time_remained = time_remained.clone();
         move |_| {
-            time_sch.add_minutes(1);
-            disp_buf.set_text(&time_sch.to_str());
+            time_scheduled.add_minutes(1);
+            time_remained.add_minutes(1);
+            buf_time_scheduled.set_text(&time_scheduled.to_str());
+            buf_time_remained.set_text(&time_remained.to_str());
         }
     });
 
     but_minutes_down.set_callback({
-        let mut disp_buf = buf_time_scheduled.clone().into_inner();
-        let mut time_sch = time_scheduled.clone();
+        let mut buf_time_scheduled = buf_time_scheduled.clone().into_inner();
+        let mut time_scheduled = time_scheduled.clone();
+        let mut buf_time_remained = buf_time_remained.clone().into_inner();
+        let mut time_remained = time_remained.clone();
         move |_| {
-            time_sch.subtract_minutes(1);
-            disp_buf.set_text(&time_sch.to_str());
+            time_scheduled.subtract_minutes(1);
+            time_remained.subtract_minutes(1);
+            buf_time_scheduled.set_text(&time_scheduled.to_str());
+            buf_time_remained.set_text(&time_remained.to_str());
         }
     });
 
