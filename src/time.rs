@@ -1,5 +1,5 @@
-use std::rc::Rc;
 use std::cell::RefCell;
+use std::rc::Rc;
 
 use std::string::String;
 
@@ -37,7 +37,7 @@ impl Time24 {
         if hours < 10 {
             hours_str = String::from("0") + &hours_str;
         }
-        
+
         let minutes = *self.minutes.borrow();
         let mut minutes_str = minutes.to_string();
         if minutes < 10 {
@@ -48,16 +48,6 @@ impl Time24 {
         return time_str;
     }
 
-    #[allow(dead_code)]
-    pub fn shutdown_schedule(&self) {
-        std::process::Command::new("shutdown")
-            .arg("-h")
-            .arg(self.hours.take().to_string() + ":" + &self.minutes.take().to_string())
-            .spawn()
-            .expect("failed");
-    }
-
-    
     #[allow(dead_code)]
     pub fn print(&self) {
         println!("{}", self.to_str());
@@ -83,7 +73,7 @@ impl Time24 {
         }
         *self.minutes.borrow_mut() = minutes;
     }
-    
+
     #[allow(dead_code)]
     pub fn subtract_hours(&mut self, hours_to_subtract: i32) {
         let mut hours = *self.hours.borrow();
@@ -93,7 +83,7 @@ impl Time24 {
         }
         *self.hours.borrow_mut() = hours;
     }
-    
+
     #[allow(dead_code)]
     pub fn subtract_minutes(&mut self, minutes_to_subtract: i32) {
         let mut minutes = *self.minutes.borrow();
@@ -103,5 +93,28 @@ impl Time24 {
             self.subtract_hours(1);
         }
         *self.minutes.borrow_mut() = minutes;
+    }
+
+    pub fn eq_zero(&self) -> bool {
+        if *self.hours.borrow() == 0 && *self.minutes.borrow() == 0 {
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn h(&self) -> i32 {
+        return *self.hours.borrow();
+    }
+
+    pub fn m(&self) -> i32 {
+        return *self.minutes.borrow();
+    }
+
+    pub fn eq(&self, time: &Self) -> bool {
+        if self.h() == time.h() && self.m() == time.m() {
+            return true;
+        }
+        return false;
     }
 }

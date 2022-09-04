@@ -1,17 +1,13 @@
+mod scheduler;
 mod time;
+
+use scheduler::shutdown_schedule;
 
 use std::cell::RefCell;
 
-
 use fltk::{
-    app::App,
-    window::Window,
-    text::TextDisplay,
-    text::TextBuffer,
-    prelude::*,
-    button::*,
-    enums::Color,
-    *,
+    app::App, button::*, enums::Color, prelude::*, text::TextBuffer, text::TextDisplay,
+    window::Window, *,
 };
 
 //use  fltk::enums::FrameType;
@@ -19,9 +15,9 @@ use fltk::{
 fn main() {
     let app = App::default();
     app::set_font_size(18);
-    
+
     let mut window = Window::new(400, 400, 400, 300, "sdgui");
-    
+
     let mut but_schedule = Button::new(290, 240, 100, 50, "Schedule");
     let mut but_cancel = Button::new(10, 240, 100, 50, "Cancel");
     let mut but_hours_down = Button::new(10, 10, 40, 40, "H-");
@@ -61,28 +57,35 @@ fn main() {
 
     let mut time_scheduled = time::Time24::new();
     time_scheduled.now();
-    buf_time_scheduled.clone().into_inner().set_text( &time_scheduled.to_str() );
+    buf_time_scheduled
+        .clone()
+        .into_inner()
+        .set_text(&time_scheduled.to_str());
 
-    let mut time_remained = time::Time24::new();
-    buf_time_remained.clone().into_inner().set_text( &time_remained.to_str() );
+    let time_remained = time::Time24::new();
+    buf_time_remained
+        .clone()
+        .into_inner()
+        .set_text(&time_remained.to_str());
 
     let mut time_current = time::Time24::new();
     time_current.now();
-    buf_time_current.clone().into_inner().set_text( &time_current.to_str() );
+    buf_time_current
+        .clone()
+        .into_inner()
+        .set_text(&time_current.to_str());
 
     but_schedule.set_callback({
         let time_sch = time_scheduled.clone();
         move |_| {
-            time_sch.shutdown_schedule();
+            shutdown_schedule(&time_sch);
             app.quit();
         }
     });
 
-    but_cancel.set_callback(
-        move |_| {
-            app.quit();
-        }
-    );
+    but_cancel.set_callback(move |_| {
+        app.quit();
+    });
 
     but_hours_up.set_callback({
         let mut buf_time_scheduled = buf_time_scheduled.clone().into_inner();
