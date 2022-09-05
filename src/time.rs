@@ -95,6 +95,7 @@ impl Time24 {
         *self.minutes.borrow_mut() = minutes;
     }
 
+    #[allow(dead_code)]
     pub fn eq_zero(&self) -> bool {
         if *self.hours.borrow() == 0 && *self.minutes.borrow() == 0 {
             true
@@ -103,14 +104,17 @@ impl Time24 {
         }
     }
 
+    #[allow(dead_code)]
     pub fn h(&self) -> i32 {
         return *self.hours.borrow();
     }
 
+    #[allow(dead_code)]
     pub fn m(&self) -> i32 {
         return *self.minutes.borrow();
     }
 
+    #[allow(dead_code)]
     pub fn eq(&self, time: &Self) -> bool {
         if self.h() == time.h() && self.m() == time.m() {
             return true;

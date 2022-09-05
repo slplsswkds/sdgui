@@ -1,5 +1,8 @@
 use crate::time::Time24;
+
 use std::process::Command;
+
+use fltk::dialog::message;
 
 #[allow(dead_code)]
 pub fn shutdown_schedule(time: &Time24) {
@@ -13,19 +16,23 @@ pub fn shutdown_schedule(time: &Time24) {
         }
     };
 
-    println!("arg is {}", time_str);
-
     #[cfg(target_os = "linux")]
-    Command::new("shutdown")
+    let schedule_cmd = Command::new("shutdown")
         .arg("-h")
         .arg(time_str)
-        .spawn()
-        .expect("failed");
+        .spawn();
 
     #[cfg(target_os = "windows")]
-    Command::new("shutdown")
+    let schedule_cmd = Command::new("shutdown")
         .arg("-s")
         .arg(time_str)
-        .spawn()
-        .expect("failed");
+        .spawn();
+
+    match schedule_cmd {
+        Ok(_) => {} ,
+        Err(e) => {
+            let msg = "Error: ".to_string() + &e.to_string();
+            message(300, 300, &msg);
+        },
+    }
 }
