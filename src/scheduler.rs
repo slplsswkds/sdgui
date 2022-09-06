@@ -8,24 +8,21 @@ use fltk::dialog::message;
 pub fn shutdown_schedule(time: &Time24) {
     let mut time_now = Time24::new();
     time_now.now();
-    let time_str = {
-        if time.eq(&time_now) {
-            "now".to_string()
-        } else {
-            time.to_str()
-        }
-    };
 
+    let mut time_str = time.to_str();
+    
     #[cfg(target_os = "linux")]
+    if time.eq(&time_now) { time_str = "0".to_string() };
     let schedule_cmd = Command::new("shutdown")
         .arg("-h")
-        .arg(time_str)
+        .arg(&time_str)
         .spawn();
 
     #[cfg(target_os = "windows")]
+    if time.eq(&time_now) { time_str = "-t 0".to_sring() };
     let schedule_cmd = Command::new("shutdown")
         .arg("-s")
-        .arg(time_str)
+        .arg(&time_str)
         .spawn();
 
     match schedule_cmd {
