@@ -7,19 +7,17 @@ use fltk::dialog::message;
 #[allow(dead_code)]
 pub fn shutdown_schedule(time: &Time24) {
 
-    let time_str = time.to_minutes();
-    
     #[cfg(target_os = "linux")]
     let schedule_cmd = Command::new("shutdown")
         .arg("-h")
-        .arg("+".to_string() + &time_str.to_string())
+        .arg("+".to_string() + &time.to_minutes().to_string())
         .spawn();
 
     #[cfg(target_os = "windows")]
     let schedule_cmd = Command::new("shutdown")
         .arg("-s")
         .arg("-t")
-        .arg(time_str)
+        .arg(time.to_seconds().to_string())
         .spawn();
 
     match schedule_cmd {

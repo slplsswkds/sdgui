@@ -126,4 +126,9 @@ impl Time24 {
     pub fn to_minutes(&self) -> i32 {
         return self.h() * 60 + self.m();
     }
+    
+    #[allow(dead_code)]
+    pub fn to_seconds(&self) -> i32 {
+        return self.h() * 3600 + self.m() * 60;
+    }
 }
