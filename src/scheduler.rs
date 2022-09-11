@@ -6,29 +6,31 @@ use fltk::dialog::message;
 
 #[allow(dead_code)]
 pub fn shutdown_schedule(time: &Time24) {
-    let mut time_now = Time24::new();
-    time_now.now();
 
-    let mut time_str = time.to_str();
+    let time_str = time.to_minutes();
     
     #[cfg(target_os = "linux")]
-    if time.eq(&time_now) { time_str = "0".to_string() };
     let schedule_cmd = Command::new("shutdown")
         .arg("-h")
-        .arg(&time_str)
+        .arg("+".to_string() + &time_str.to_string())
         .spawn();
 
     #[cfg(target_os = "windows")]
-    if time.eq(&time_now) { time_str = "-t 0".to_string() };
     let schedule_cmd = Command::new("shutdown")
         .arg("-s")
-        .arg(&time_str)
+        .arg("-t")
+        .arg(time_str)
         .spawn();
 
     match schedule_cmd {
         Ok(_) => {} ,
-        Err(e) => {
-            let msg = "Error: ".to_string() + &e.to_string();
+        Err(error) => {
+            let msg = "Error: ".to_string() + &error.to_string() + &"\nMaybe you haven't permission to use \"shutdown\"".to_string();
+            message(300, 300, &msg);
+
+            #[cfg(target_os = "linux")]
+            let msg = "Copying \"/usr/sbin/shutdown\" to \"/usr/bin/\" maybe will solve this error".to_string();
+
             message(300, 300, &msg);
         },
     }

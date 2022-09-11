@@ -76,9 +76,9 @@ fn main() {
         .set_text(&time_current.to_str());
 
     but_schedule.set_callback({
-        let time_sch = time_scheduled.clone();
+        let time_remained = time_remained.clone();
         move |_| {
-            shutdown_schedule(&time_sch);
+            shutdown_schedule(&time_remained);
             app.quit();
         }
     });
