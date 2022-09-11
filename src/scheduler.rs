@@ -19,7 +19,7 @@ pub fn shutdown_schedule(time: &Time24) {
         .spawn();
 
     #[cfg(target_os = "windows")]
-    if time.eq(&time_now) { time_str = "-t 0".to_sring() };
+    if time.eq(&time_now) { time_str = "-t 0".to_string() };
     let schedule_cmd = Command::new("shutdown")
         .arg("-s")
         .arg(&time_str)
